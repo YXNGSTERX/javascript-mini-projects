@@ -1,0 +1,60 @@
+
+body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f6f7eb;
+    color: #393e41;
+    font-family: sans-serif;
+}
+h1{
+    text-align: center;
+    font-size: 6em;
+}
+
+.drumkit {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    gap: 10px;
+}
+.key{
+    width: 4em;
+    height: 4em;
+    border: 2px solid #393e41;
+    border-radius: 8px;
+    margin: 10px;
+    text-align: center;
+    line-height: normal;
+    font-size: 1.5em;
+    background-color: #e94f37;
+    color: #f6f7eb;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 1rem 0.5rem;
+    box-shadow: 0 6px 10px rgba(57, 62, 65, 0.15);
+    transition: all 0.07s ease; 
+}
+
+
+
+.key kbd{
+    margin-bottom: 0.25rem;
+}
+
+.playing{
+    background-color: #393e41;
+    transform: scale(1.1); 
+    border-color: #ffc600; 
+    box-shadow: 0 0 10px #ffc600, 
+                0 0 20px #ffc600;
+}
