@@ -4,9 +4,9 @@ A collection of JavaScript projects for learning and practice.
 
 ## Projects
 
-- [Drumkit](../../tree/project/drumkit) - Interactive drum machine
-- [Todo List](../../tree/project/todo-list) - Persistent todo application
-- [Quote Generator](../../tree/project/quote-generator) - Random quote generator
-- [Color Flipper](../../tree/project/color-flipper) - Random color generator
-- [Palindrome Checker](../../tree/project/palindrome-checker) - Check if text is a palindrome
-- [Stopwatch](../../tree/project/stopwatch) - Simple stopwatch timer
+- [Drumkit](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/coding-everyday/drumkit) - Interactive drum machine
+- [Todo List](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/Persistent%20Todo%20List) - Persistent todo application
+- [Quote Generator](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/Random%20quote%20generator) - Random quote generator
+- [Color Flipper](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/color%20flipper) - Random color generator
+- [Palindrome Checker](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/palindrome%20checker) - Check if text is a palindrome
+- [Stopwatch](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/stopwatch) - Simple stopwatch timer
