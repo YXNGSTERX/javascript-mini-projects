@@ -10,3 +10,4 @@ A collection of JavaScript projects for learning and practice.
 - [Color Flipper](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/color%20flipper) - Random color generator
 - [Palindrome Checker](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/palindrome%20checker) - Check if text is a palindrome
 - [Stopwatch](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/stopwatch) - Simple stopwatch timer
+- [Clock](https://github.com/YXNGSTERX/javascript-mini-projects/tree/main/beginner/clock) - Digital/analog clock display
