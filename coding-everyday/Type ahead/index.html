@@ -4,58 +4,127 @@
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/✅" />
+  <link rel="icon" href="https://fav.farm/🔥" />
 </head>
 <body>
+  <div class="locationArea">
+    <button type="button" id="locationBtn">location filtering</button>
+    <label>
+      <input type="checkbox" id="nearestToggle">
+      nearest first
+    </label>
+    <p id="locationStatus" aria-live="polite"></p>
+  </div>
 
   <form class="search-form">
+    
     <input type="text" class="search" placeholder="City or State">
     <ul class="suggestions">
       <li>Filter for a city</li>
       <li>or a state</li>
     </ul>
   </form>
+
+
+
 <script>
-const dataUrl = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-const places = [];
-fetch(dataUrl)
-  .then(blob => blob.json())
-  .then(data => places.push(...data));
 
-function findMatches(term, places) {
-  return places.filter(place => {
-    const regex = new RegExp(term, 'gi');
-    return place.city.match(regex) || place.state.match(regex)
+const cities = [];
+let userCoords = null;
+
+fetch(endpoint).then(chunk => chunk.json()).then(data => cities.push(...data)) ;
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place =>{
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+function distanceScore(userLat, userLng, cityLat, cityLng) {
+  const latDiff = cityLat - userLat;
+  const lngDiff = cityLng - userLng;
+  return (latDiff * latDiff) + (lngDiff * lngDiff);
+}
+
+function sortByDistance(places) {
+  if (!userCoords || !nearestToggle.checked) return places;
+
+  return [...places].sort((a, b) => {
+    const aScore = distanceScore(
+      userCoords.lat,
+      userCoords.lng,
+      Number(a.latitude),
+      Number(a.longitude)
+    );
+    const bScore = distanceScore(
+      userCoords.lat,
+      userCoords.lng,
+      Number(b.latitude),
+      Number(b.longitude)
+    );
+    return aScore - bScore;
   });
 }
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
 function displayMatches() {
-  const matches = findMatches(this.value, places);
-  const html = matches.map(place => {
+  const matchArray = sortByDistance(findMatches(this.value, cities));
+  
+  
+  const html = matchArray.map(place => {
     const regex = new RegExp(this.value, 'gi');
-    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
-    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
-    return `
+    const citynamehl = place.city.replace(regex, `<span class = hl>${this.value}</span>`);
+    const statenamehl = place.state.replace(regex, `<span class = hl>${this.value}</span>`);
+    const populationFormatted = Number(place.population).toLocaleString();
+    return`
       <li>
-        <span class="name">${cityName}, ${stateName}</span>
-        <span class="population">${numberWithCommas(place.population)}</span>
-      </li>
-    `;
-  }).join('');
-  resultsList.innerHTML = html;
+        <span class='name'>${citynamehl}, ${statenamehl}</span>;
+        <span class='population'>${populationFormatted}</span>;
+    `
+  });
+  suggestions.innerHTML = html.join('');
 }
 
-const queryInput = document.querySelector('.search');
-const resultsList = document.querySelector('.suggestions');
+  const searchInput = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+  const nearestToggle = document.querySelector('#nearestToggle');
 
-queryInput.addEventListener('change', displayMatches);
-queryInput.addEventListener('keyup', displayMatches);
+  searchInput.addEventListener('change',displayMatches);
+  searchInput.addEventListener('keyup',displayMatches);
+  nearestToggle.addEventListener('change', () => displayMatches.call(searchInput));
+
+const locationActivate = document.querySelector('#locationBtn');
+locationActivate.addEventListener('click',AskLocation);
+
+const locationStatus = document.querySelector('#locationStatus');
+
+
+function AskLocation() {
+  if ('geolocation' in navigator){ 
+  navigator.geolocation.getCurrentPosition(
+  (position) => {
+      userCoords = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      locationStatus.textContent = 'Location enabled';
+      displayMatches.call(searchInput);
+    },
+    (error) => {
+      console.error("Error Code:", error.code, "Message:", error.message);
+      locationStatus.textContent = 'There was a problem enabling Location';
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 })
+  } else {
+    locationStatus.textContent = 'Geolocation is not supported in this browser';
+  }
+}  
+
+
 
 </script>
-  </body>
+
+
+</body>
 </html>
