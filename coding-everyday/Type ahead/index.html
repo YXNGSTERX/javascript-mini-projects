@@ -7,6 +7,13 @@
   <link rel="icon" href="https://fav.farm/✅" />
 </head>
 <body>
+  <div class="locationArea">
+    <button type="button" id="locationBtn">location filtering</button>
+    <label>
+      <input type="checkbox" id="checkbox">
+    </label>
+    <p id="locationStatus" aria-live="polite"></p>
+  </div>
 
   <form class="search-form">
     <input type="text" class="search" placeholder="City or State">
@@ -18,43 +25,95 @@
 <script>
 const dataUrl = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-const places = [];
-fetch(dataUrl)
-  .then(blob => blob.json())
-  .then(data => places.push(...data));
+const cities = [];
+let UsrCoords = null;
 
-function findMatches(term, places) {
-  return places.filter(place => {
-    const regex = new RegExp(term, 'gi');
-    return place.city.match(regex) || place.state.match(regex)
+fetch(endpoint).then(chunk => chunk.json()).then(data => cities.push(...data)) ;
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place =>{
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+function CalcDistance (CityLat,UserLat,CityLong,UserLong){
+  const latDiff = CityLat - UserLat ;
+  const Lngdiff = CityLong - UserLong ;
+  return latDiff * latDiff + Lngdiff * Lngdiff
+}
+
+
+function sortNearest (cities) {
+  if (!UsrCoords || !checkbox.checked) return cities;
+
+  return [...cities].sort((a,b) => {
+    const aScore = CalcDistance( Number(a.latitude),UsrCoords.lat, Number(a.longitude),UsrCoords.lng);
+    const bScore = CalcDistance( Number(b.latitude),UsrCoords.lat, Number(b.longitude),UsrCoords.lng);
+    return aScore - bScore;
   });
 }
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
 
 function displayMatches() {
-  const matches = findMatches(this.value, places);
-  const html = matches.map(place => {
+  const matchArray = sortNearest(findMatches(this.value, cities));
+  
+  
+  const html = matchArray.map(place => {
+
+    const query = this.value.trim();
+    if (!query) return;
+
     const regex = new RegExp(this.value, 'gi');
     const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
     const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
     return `
       <li>
-        <span class="name">${cityName}, ${stateName}</span>
-        <span class="population">${numberWithCommas(place.population)}</span>
+      
+        <span class='name'>${citynamehl}, ${statenamehl}</span>
+        <span class='population'>${populationFormatted}</span>
       </li>
-    `;
-  }).join('');
-  resultsList.innerHTML = html;
+    `
+  });
+  suggestions.innerHTML = html.join('');
 }
 
-const queryInput = document.querySelector('.search');
-const resultsList = document.querySelector('.suggestions');
+  const searchInput = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
 
-queryInput.addEventListener('change', displayMatches);
-queryInput.addEventListener('keyup', displayMatches);
+  searchInput.addEventListener('change',displayMatches);
+  searchInput.addEventListener('keyup',displayMatches);
+
+const locationActivate = document.querySelector('#locationBtn');
+locationActivate.addEventListener('click',AskLocation);
+
+const checkbox = document.querySelector ('#checkbox');
+checkbox.addEventListener('change', () => displayMatches.call(searchInput));
+
+const locationStatus = document.querySelector('#locationStatus');
+
+
+function AskLocation() {
+  if ('geolocation' in navigator){ 
+  navigator.geolocation.getCurrentPosition(
+  (position) => {
+      UsrCoords = {
+        lat: position.coords.latitude ,
+        lng: position.coords.longitude
+      }
+      locationStatus.textContent = 'Location enabled';
+      displayMatches.call(searchInput);
+    },
+    (error) => {
+      console.error("Error Code:", error.code, "Message:", error.message);
+      locationStatus.textContent = 'There was a problem enabling Location';
+    },
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 })
+  } else {
+    locationStatus.textContent = 'Geolocation is not supported in this browser';
+  }
+}  
+
+
 
 </script>
   </body>
