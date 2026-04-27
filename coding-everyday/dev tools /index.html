@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+console.log("I'm learning JavaScript");
+    // Interpolated
+
+const variable = 'JavaScript';
+console.log(`i'm learning ${variable}`);
+
+    // Styled
+console.log("%c I'm learning JavaScript", 'font-size:30px; background:red');
+    // warning!
+console.warn('Javascript is hard!!!');
+    // Error :|
+console.error('It gets harder');
+    // Info
+console.info('it gets easier if you do it everyday');
+    // Testing
+const p = document.querySelector('p');
+
+console.assert(p.classList.contains('JavaScript'), 'That is wrong');
+
+    // clearing
+console.clear()
+
+    // Viewing DOM Elements
+console.log(p)
+console.dir(p)
+    // Grouping together
+dogs.forEach(dog => {
+    console.groupCollapsed(`${dog.name}`);
+    console.log(`This is ${dog.name}`);
+    console.log(`${dog.name} is ${dog.age} years old`);
+    console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+    console.groupEnd(`${dog.name}`);
+});
+
+    // counting
+console.count('times');
+console.count('times');
+console.count('times');
+console.count('times');
+console.count('times');
+console.count('times');
+    // timing
+
+console.time('fetching data');
+fetch('https://github.com/YXNGSTERX')
+    .then(data=>data.json())
+    .then(data => {
+        console.timeEnd('fetching data')
+        console.log(data);
+    });
+
+    
+
+  </script>
+</body>
+</html>

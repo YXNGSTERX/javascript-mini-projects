@@ -73,14 +73,19 @@ function displayMatches() {
   
   
   const html = matchArray.map(place => {
+
+    const query = this.value.trim();
+    if (!query) return '';
+
     const regex = new RegExp(this.value, 'gi');
-    const citynamehl = place.city.replace(regex, `<span class = hl>${this.value}</span>`);
-    const statenamehl = place.state.replace(regex, `<span class = hl>${this.value}</span>`);
+    const citynamehl = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+    const statenamehl = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
     const populationFormatted = Number(place.population).toLocaleString();
     return`
       <li>
-        <span class='name'>${citynamehl}, ${statenamehl}</span>;
-        <span class='population'>${populationFormatted}</span>;
+        <span class='name'>${citynamehl}, ${statenamehl}</span>
+        <span class='population'>${populationFormatted}</span>
+      </li>
     `
   });
   suggestions.innerHTML = html.join('');
