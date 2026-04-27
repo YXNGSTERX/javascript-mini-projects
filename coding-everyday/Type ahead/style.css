@@ -79,3 +79,74 @@ span.population {
   padding: 0 4px;
   border-radius: 4px;
 }
+
+.locationArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin: 28px auto 0;
+  flex-wrap: wrap;
+}
+
+#locationBtn {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 12px 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#locationBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.3);
+}
+
+#locationBtn:active {
+  transform: translateY(0);
+}
+
+#locationBtn:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.locationArea label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  padding: 9px 14px;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
+}
+
+#nearestToggle {
+  width: 18px;
+  height: 18px;
+  accent-color: #1d4ed8;
+  cursor: pointer;
+}
+
+#locationStatus {
+  margin: 0;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+#locationStatus.error {
+  color: #b00020;
+}
+
+#locationStatus.success {
+  color: #0b7a2f;
+}
